@@ -1,7 +1,7 @@
 name: First-time Contributor Check
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened]
   issues:
     types: [opened]
@@ -129,6 +129,12 @@ jobs:
             const author = context.actor;
             const { owner, repo } = context.repo;
             const commentBody = context.payload.comment.body;
+            
+            const issueAuthor = context.payload.issue.user.login;
+            if (author === issueAuthor) {
+              console.log(`${author} is the author of this issue/PR. Skipping greeting.`);
+              return;
+            }
             
             console.log(`Checking for past comments from ${author}...`);
             const allComments = await github.paginate(github.rest.issues.listCommentsForRepo, {
