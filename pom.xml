@@ -17,7 +17,7 @@
     <version.joda-time>2.12.5</version.joda-time>
     <version.uuid-generator>5.1.1</version.uuid-generator>
     <version.feel-scala>1.19.3</version.feel-scala>
-    <version.quarkus>3.29.0</version.quarkus>
+    <version.quarkus>3.30.0</version.quarkus>
     <version.java>17</version.java>
     <version.spring>6.2.12</version.spring>
     <version.spring-boot>3.5.7</version.spring-boot>
@@ -185,12 +185,12 @@
           <dependency>
             <groupId>org.openrewrite.recipe</groupId>
             <artifactId>rewrite-static-analysis</artifactId>
-            <version>2.20.0</version>
+            <version>2.21.0</version>
           </dependency>
           <dependency>
             <groupId>org.openrewrite.recipe</groupId>
             <artifactId>rewrite-testing-frameworks</artifactId>
-            <version>3.18.0</version>
+            <version>3.21.3</version>
           </dependency>
           <dependency>
             <groupId>org.openrewrite.recipe</groupId>
@@ -480,6 +480,13 @@
                   <ignoreVersion>
                     <type>range</type>
                     <version>[5,)</version>
+                  </ignoreVersion>
+                </rule>
+                <rule>
+                  <groupId>org.springframework</groupId>
+                  <ignoreVersion>
+                    <type>range</type>
+                    <version>[7,)</version>
                   </ignoreVersion>
                 </rule>
                 <!-- JakartaEE 11 -->
