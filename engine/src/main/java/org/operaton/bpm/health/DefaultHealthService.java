@@ -20,6 +20,7 @@ import org.operaton.bpm.engine.impl.jobexecutor.JobExecutor;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ import java.util.Map;
  * @author <a href="mailto:tomnm77@gmail.com">Tomasz Korcz</a>
  */
 public class DefaultHealthService implements HealthService {
+
+  private static final int DATASOURCE_CONNECTION_TIMEOUT_SECONDS = 2;
 
   private final DataSource dataSource;
   private final JobExecutor jobExecutor;
@@ -52,7 +55,7 @@ public class DefaultHealthService implements HealthService {
 
   @Override
   public HealthResult check() {
-    String timestamp = Instant.now().toString();
+    String timestamp = OffsetDateTime.now().toString();
 
     Map<String, Object> details = new LinkedHashMap<>();
 
@@ -67,7 +70,7 @@ public class DefaultHealthService implements HealthService {
     String dbError = null;
     if (dataSource != null) {
       try (Connection c = dataSource.getConnection()) {
-        dbConnected = c != null && c.isValid(2);
+        dbConnected = c != null && c.isValid(DATASOURCE_CONNECTION_TIMEOUT_SECONDS);
       } catch (Exception e) {
         dbConnected = false;
         dbError = e.getClass().getSimpleName() + ": " + e.getMessage();
@@ -89,13 +92,12 @@ public class DefaultHealthService implements HealthService {
       frontend = new LinkedHashMap<>(frontendHealthContributor.frontendDetails());
     } else {
       frontend = new LinkedHashMap<>();
-      frontend.put("operational", "unknown");
+      frontend.put("operational", false);
     }
     details.put("frontend", frontend);
 
     boolean dbOk = (dataSource == null) || dbConnected;
-    boolean jobOk = (jobExecutor == null) || jobExecutorActive;
-    String status = (dbOk && jobOk) ? "UP" : "DOWN";
+    String status = dbOk ? "UP" : "DOWN";
 
     return new HealthResult(status, timestamp, version, details);
   }
