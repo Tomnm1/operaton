@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.operaton.bpm.engine.health.FrontendHealthContributor;
 import org.operaton.bpm.engine.health.HealthResult;
+import org.operaton.bpm.engine.impl.ProcessEngineImpl;
 import org.operaton.bpm.engine.impl.jobexecutor.JobExecutor;
 
 import javax.sql.DataSource;
@@ -54,22 +55,25 @@ class DefaultHealthServiceTest {
     assertThat(frontendDetails.get("operational")).isEqualTo(true);
   }
 
-  @Test
-  void shouldReportDatabaseUp() throws Exception {
-    DataSource ds = mock(DataSource.class);
-    Connection conn = mock(Connection.class);
-    when(ds.getConnection()).thenReturn(conn);
-    when(conn.isValid(anyInt())).thenReturn(true);
+    @Test
+    void shouldReportDatabaseUp() throws Exception {
+        DataSource ds = mock(DataSource.class);
+        Connection conn = mock(Connection.class);
+        when(ds.getConnection()).thenReturn(conn);
+        when(conn.isValid(anyInt())).thenReturn(true);
 
-    JobExecutor jobExecutor = mock(JobExecutor.class);
+        JobExecutor jobExecutor = mock(JobExecutor.class);
 
-    DefaultHealthService service = new DefaultHealthService(ds, jobExecutor, null);
-    HealthResult result = service.check();
+        Iterator<?> iterator = Collections.emptyIterator();
+        when(jobExecutor.engineIterator()).thenReturn((Iterator<ProcessEngineImpl>) iterator);
 
-    assertThat(result.status()).isEqualTo("UP");
-    Map<String, Object> db = (Map<String, Object>) result.details().get("database");
-    assertThat(db.get("connected")).isEqualTo(true);
-  }
+        DefaultHealthService service = new DefaultHealthService(ds, jobExecutor, null);
+        HealthResult result = service.check();
+
+        assertThat(result.status()).isEqualTo("UP");
+        Map<String, Object> db = (Map<String, Object>) result.details().get("database");
+        assertThat(db.get("connected")).isEqualTo(true);
+    }
 
   @Test
   void shouldReportDatabaseDownOnException() throws Exception {
