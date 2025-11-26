@@ -13,24 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.operaton.bpm.health;
-
-import java.time.Instant;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+package org.operaton.bpm.engine.health;
 
 /**
- * Immutable value object describing Operaton health.
+ * SPI for obtaining Operaton health information independent of the runtime.
  *
  * @author <a href="mailto:tomnm77@gmail.com">Tomasz Korcz</a>
+ * @since 1.1
  */
-public record HealthResult(String status, String timestamp, String version, Map<String, Object> details) {
+public interface HealthService {
 
-    public HealthResult(String status, String timestamp, String version, Map<String, Object> details) {
-        this.status = status;
-        this.timestamp = timestamp != null ? timestamp : Instant.now().toString();
-        this.version = version;
-        this.details = details != null ? Collections.unmodifiableMap(new LinkedHashMap<>(details)) : Collections.emptyMap();
-    }
+  /**
+   * Perform a health check and return a {@link HealthResult}.
+   */
+  HealthResult check();
 }

@@ -15,8 +15,8 @@
  */
 package org.operaton.bpm.run.health;
 
-import org.operaton.bpm.health.HealthResult;
-import org.operaton.bpm.health.HealthService;
+import org.operaton.bpm.engine.health.HealthResult;
+import org.operaton.bpm.engine.health.HealthService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,11 @@ import java.util.Map;
 
 /**
  * Health endpoint for Operaton Run.
- * Provides a lightweight /health JSON suitable for load balancers and uptime checks
+ * Provides a lightweight /health JSON suitable for load balancers and uptime checks.
+ * Note: This endpoint is specific to the Operaton Run distribution. When deploying
+ * Operaton on application servers like Tomcat or WildFly, those runtimes typically
+ * provide their own health endpoints (e.g., via vendor-specific tooling or
+ * Spring Boot actuator in custom apps), so this endpoint is not exposed there.
  *
  * @author <a href="mailto:tomnm77@gmail.com">Tomasz Korcz</a>
  */

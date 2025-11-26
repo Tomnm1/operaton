@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.operaton.bpm.health;
+package org.operaton.bpm.engine.health;
+
+import java.util.Map;
 
 /**
- * SPI for obtaining Operaton health information independent of the runtime.
+ * SPI to contribute frontend (webapps) related health information.
  *
  * @author <a href="mailto:tomnm77@gmail.com">Tomasz Korcz</a>
+ * @since 1.1
  */
-public interface HealthService {
+public interface FrontendHealthContributor {
 
   /**
-   * Perform a health check and return a {@link HealthResult}.
+   * Provide frontend-related health details. Implementations should at minimum
+   * expose an "operational" flag indicating whether the frontend is available.
+   * Example keys:
+   * - operational: boolean
+   * - path: String (application path if applicable)
    */
-  HealthResult check();
+  Map<String, Object> frontendDetails();
 }

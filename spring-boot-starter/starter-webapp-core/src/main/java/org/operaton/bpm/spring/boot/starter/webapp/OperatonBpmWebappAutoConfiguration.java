@@ -16,7 +16,7 @@
  */
 package org.operaton.bpm.spring.boot.starter.webapp;
 
-import org.operaton.bpm.health.FrontendHealthContributor;
+import org.operaton.bpm.engine.health.FrontendHealthContributor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

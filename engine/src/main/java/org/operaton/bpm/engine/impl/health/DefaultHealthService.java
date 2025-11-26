@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.operaton.bpm.health;
+package org.operaton.bpm.engine.impl.health;
 
+import org.operaton.bpm.engine.health.FrontendHealthContributor;
+import org.operaton.bpm.engine.health.HealthResult;
+import org.operaton.bpm.engine.health.HealthService;
 import org.operaton.bpm.engine.impl.jobexecutor.JobExecutor;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -61,10 +63,8 @@ public class DefaultHealthService implements HealthService {
 
     boolean jobExecutorActive = jobExecutor != null && jobExecutor.isActive();
     boolean engineRegistered = jobExecutor != null && jobExecutor.engineIterator().hasNext();
-    Map<String, Object> jobExec = new LinkedHashMap<>();
-    jobExec.put("active", jobExecutorActive);
-    jobExec.put("engineRegistered", engineRegistered);
-    details.put("jobExecutor", jobExec);
+      Map<String, Object> jobExec = getStringObjectMap(jobExecutorActive, engineRegistered);
+      details.put("jobExecutor", jobExec);
 
     boolean dbConnected = false;
     String dbError = null;
@@ -101,4 +101,18 @@ public class DefaultHealthService implements HealthService {
 
     return new HealthResult(status, timestamp, version, details);
   }
+
+    private Map<String, Object> getStringObjectMap(boolean jobExecutorActive, boolean engineRegistered) {
+        Map<String, Object> jobExec = new LinkedHashMap<>();
+        if (jobExecutor != null) {
+          jobExec.put("name", jobExecutor.getName());
+          jobExec.put("lockOwner", jobExecutor.getLockOwner());
+          jobExec.put("lockTimeInMillis", jobExecutor.getLockTimeInMillis());
+          jobExec.put("maxJobsPerAcquisition", jobExecutor.getMaxJobsPerAcquisition());
+          jobExec.put("waitTimeInMillis", jobExecutor.getWaitTimeInMillis());
+        }
+        jobExec.put("active", jobExecutorActive);
+        jobExec.put("engineRegistered", engineRegistered);
+        return jobExec;
+    }
 }

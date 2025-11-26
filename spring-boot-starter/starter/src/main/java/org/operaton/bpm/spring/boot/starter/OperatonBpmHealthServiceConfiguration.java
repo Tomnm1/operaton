@@ -16,9 +16,9 @@
 package org.operaton.bpm.spring.boot.starter;
 
 import org.operaton.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.operaton.bpm.health.DefaultHealthService;
-import org.operaton.bpm.health.FrontendHealthContributor;
-import org.operaton.bpm.health.HealthService;
+import org.operaton.bpm.engine.impl.health.DefaultHealthService;
+import org.operaton.bpm.engine.health.FrontendHealthContributor;
+import org.operaton.bpm.engine.health.HealthService;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;

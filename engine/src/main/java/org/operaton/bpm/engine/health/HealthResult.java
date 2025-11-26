@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.operaton.bpm.health;
+package org.operaton.bpm.engine.health;
 
+import java.time.Instant;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * SPI to contribute frontend (webapps) related health information.
+ * Immutable value object describing Operaton health.
  *
  * @author <a href="mailto:tomnm77@gmail.com">Tomasz Korcz</a>
+ * @since 1.1
  */
-public interface FrontendHealthContributor {
+public record HealthResult(String status, String timestamp, String version, Map<String, Object> details) {
 
-  /**
-   * Provide frontend-related health details. Implementations should at minimum
-   * expose an "operational" flag indicating whether the frontend is available.
-   * Example keys:
-   * - operational: boolean
-   * - path: String (application path if applicable)
-   */
-  Map<String, Object> frontendDetails();
+    public HealthResult(String status, String timestamp, String version, Map<String, Object> details) {
+        this.status = status;
+        this.timestamp = timestamp != null ? timestamp : Instant.now().toString();
+        this.version = version;
+        this.details = details != null ? Collections.unmodifiableMap(new LinkedHashMap<>(details)) : Collections.emptyMap();
+    }
 }
