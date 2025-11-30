@@ -17,6 +17,7 @@ package org.operaton.bpm.run.health;
 
 import org.operaton.bpm.engine.health.HealthResult;
 import org.operaton.bpm.engine.health.HealthService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ import java.util.Map;
  * @author <a href="mailto:tomnm77@gmail.com">Tomasz Korcz</a>
  */
 @RestController
+@ConditionalOnProperty(prefix = "management.health.operaton", name = "enabled", matchIfMissing = true)
 public class HealthController {
 
   private final HealthService healthService;
